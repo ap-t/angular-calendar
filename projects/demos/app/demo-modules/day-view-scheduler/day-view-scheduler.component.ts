@@ -25,6 +25,7 @@ import {
   CalendarEvent,
   WeekViewAllDayEventRow,
   WeekViewAllDayEvent,
+  WeekViewHourColumn,
 } from 'calendar-utils';
 import { DragEndEvent, DragMoveEvent } from 'angular-draggable-droppable';
 
@@ -34,8 +35,13 @@ export interface User {
   color: EventColor;
 }
 
+export interface DayViewSchedulerHourColumn extends WeekViewHourColumn {
+  user: User;
+}
+
 interface DayViewScheduler extends WeekView {
   users: User[];
+  hourColumns: DayViewSchedulerHourColumn[];
 }
 
 interface GetWeekViewArgsWithUsers extends GetWeekViewArgs {
@@ -61,7 +67,7 @@ export class DayViewSchedulerCalendarUtils extends CalendarUtils {
         ...args,
         events,
       });
-      view.hourColumns.push(columnView.hourColumns[0]);
+      view.hourColumns.push({ ...columnView.hourColumns[0], user: user });
       columnView.allDayEventRows.forEach(({ row }, rowIndex) => {
         view.allDayEventRows[rowIndex] = view.allDayEventRows[rowIndex] || {
           row: [],
@@ -106,6 +112,11 @@ export class DayViewSchedulerComponent
   }
 
   trackByUserId = (index: number, row: User) => row.id;
+
+  trackByDayViewSchedulerHourColumn = (
+    index: number,
+    column: DayViewSchedulerHourColumn
+  ) => (column?.user?.id != null ? column.user.id : column);
 
   ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);

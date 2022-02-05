@@ -124,7 +124,10 @@
     >
       <div
         class="cal-day-column"
-        *ngFor="let column of view.hourColumns; trackBy: trackByHourColumn"
+        *ngFor="
+          let column of view.hourColumns;
+          trackBy: trackByDayViewSchedulerHourColumn
+        "
       >
         <mwl-calendar-week-view-current-time-marker
           [columnDate]="column.date"
