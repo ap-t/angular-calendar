@@ -25,6 +25,7 @@ import {
   CalendarEvent,
   WeekViewAllDayEventRow,
   WeekViewAllDayEvent,
+  WeekViewHourColumn,
 } from 'calendar-utils';
 import { DragEndEvent, DragMoveEvent } from 'angular-draggable-droppable';
 
@@ -106,6 +107,11 @@ export class DayViewSchedulerComponent
   }
 
   trackByUserId = (index: number, row: User) => row.id;
+
+  trackByHourColumn = (index: number, column: WeekViewHourColumn) =>
+    column.events?.length && column.events[0]?.event?.meta?.user?.id != null
+      ? column.events[0].event.meta.user.id
+      : column;
 
   ngOnChanges(changes: SimpleChanges): void {
     super.ngOnChanges(changes);
